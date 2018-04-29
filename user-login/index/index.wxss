@@ -1,0 +1,8 @@
+.name, .avatar{
+  margin: 0 auto;
+  text-align: center;
+}
+.avatar {
+  height: 100rpx;
+  width: 100rpx;
+}
