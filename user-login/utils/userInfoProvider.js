@@ -26,7 +26,7 @@ const STATICMETHODS = {
       },
       fail: (res) => {
         this.printF('wx.login->fail', 'error')
-        STATICMETHODS.wxLoginF(wxUser)
+        this.wxLoginF(wxUser)
       }
     })
   },
@@ -34,6 +34,8 @@ const STATICMETHODS = {
     this.wxLoginF(wxUser, cb)
   },
   requestSsoUserInfoF(wxUser, code, cb) {
+    // 不能在这里进行retry，因为请求所用到的encrypted和iv, 不能通过wx.getUserInfo获取了
+    // 所以如果获取用户信息失败，必须得让用户再次点击授权按钮
     wx.request({
       url: this.getSsoUserInfoRequestUrl, // 这里填写后台登录url
       method: 'POST',
@@ -48,7 +50,7 @@ const STATICMETHODS = {
       },
       fail: (res) => {
         this.printF('getSsoUserInfo->fail->retry', 'error')
-        STATICMETHODS.getSsoUserInfoF(wxUser, cb)
+        // STATICMETHODS.getSsoUserInfoF(wxUser, cb)
       },
       success: (res) => {
         this.printF('getSsoUserInfo->success')
